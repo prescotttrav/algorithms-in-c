@@ -2,12 +2,6 @@
 
 #include "../../src/search/linear.h"
 
-void arrcpy(int to[], int from[], int n) {
-  for (int i = 0; i < n; i++) {
-    to[i] = from[i];
-  }
-}
-
 void test_linear_search(void) {
   // Should work as expected on int[]
   int arr[] = {1, 2, 3, 4, 5};
