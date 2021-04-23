@@ -8,7 +8,7 @@ int binary_search(const void *list, const void *val, int n) {
   int low, mid, high;
 
   low = 0;
-  high = n;
+  high = n - 1;
 
   while (low <= high) {
     mid = (low + high) / 2;
