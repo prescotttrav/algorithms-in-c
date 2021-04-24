@@ -1,3 +1,3 @@
-#pargma once
+#pragma once
 
-void quick_sort(const void *list, int n);
+void quick_sort(int *list, int n);

@@ -2,16 +2,9 @@
 
 #include "../../src/search/binary.h"
 
-void test_binary_search(void) {
-  // Should work as expected on int[]
+void test_binary_search() {
   int arr[] = {1, 2, 3, 4, 5};
   assert(binary_search(arr, 5, 5) == 4);
 
   assert(binary_search(arr, -1, 5) == -1);
-
-  // Should work as expected on char[]
-  char list[] = "ehllo";
-  assert(binary_search(list, 'e', 5) == 0);
-
-  assert(binary_search(list, 'z', 5) == -1);
 }

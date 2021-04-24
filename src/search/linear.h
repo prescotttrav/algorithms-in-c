@@ -1,3 +1,3 @@
-#pargma once
+#pragma once
 
-int linear_search(const void *list, const void *val, int n);
+int linear_search(const int *list, int val, int n);
