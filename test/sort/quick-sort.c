@@ -1,16 +1,32 @@
-#include <assert.h>
+#include <stdio.h>
+#include <stdlib.h>
 
 #include "../../src/sort/quick-sort.h"
-
-static void assertarr(const int *actual, const int *expected, int n) {
-  for (int i = 0; i < n; i++) {
-    assert(*(actual + i) == *(expected + i));
-  }
-}
+#include "../utils.h"
 
 void test_quick_sort(void) {
-  int arr[] = {5, 4, 5, 3, 1, 2};
-  quick_sort(arr, 6);
+  int size = 6;
+  int *arr = NULL;
 
-  assertarr(arr, (int[]){1, 2, 3, 4, 5, 5}, 6);
+  arr = (int *) malloc(sizeof(int) * size);
+
+  if (!arr) {
+    free(arr);
+    fprintf(stderr, "Allocation memory failed.\n");
+    exit(-1);
+  }
+
+  // Should work on int type.
+  arrcpy(arr, (int[]){5, 4, 5, 3, 1, 2}, size);
+  quick_sort(arr, size);
+
+  assertarr(arr, (int[]){1, 2, 3, 4, 5, 5}, size);
+
+  // Should work on char type.
+  arrcpy(arr, (int[]){'z', 'y', 'g', 'o', 't', 'e'}, size);
+  quick_sort(arr, size);
+
+  assertarr(arr, (int[]){'e', 'g', 'o', 't', 'y', 'z'}, size);
+
+  free(arr);
 }
