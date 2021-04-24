@@ -3,8 +3,8 @@ CC=gcc
 MODULE_SRC=$(wildcard **/**/*.c)
 MODULE_OBJ=$(patsubst %.c,%.o,$(MODULE_SRC))
 
-TEST_SRC=test/main.c
-TEST_OBJ=test/main.o
+TEST_SRC=$(wildcard test/*.c)
+TEST_OBJ=$(patsubst %.c,%.o,$(TEST_SRC))
 
 test: $(MODULE_OBJ) $(TEST_OBJ)
 	$(CC) -o $@.exe $^
