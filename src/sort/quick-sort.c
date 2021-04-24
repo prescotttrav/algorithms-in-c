@@ -1,14 +1,16 @@
 #include <stdlib.h>
 
+#include "quick-sort.h"
+
 /* swap switches two list items in place */
-static void swap(const void *list, int a, int b) {
-  void *temp = *(list + a);
+static void swap(int *list, int a, int b) {
+  int temp = *(list + a);
   *(list + a) = *(list + b);
-  *(list + b) = *temp;
+  *(list + b) = temp;
 }
 
 /* quick_sort sorts a list of items. */
-void quick_sort(const void *list, int n) {
+void quick_sort(int *list, int n) {
   int i, last;
 
   if (n <= 1)
@@ -25,5 +27,5 @@ void quick_sort(const void *list, int n) {
   swap(list, 0, last);
 
   quick_sort(list, last);
-  quick_sport(list + last + 1, n - last - 1);
+  quick_sort(list + last + 1, n - last - 1);
 }

@@ -2,18 +2,15 @@
 
 #include "../../src/sort/quick-sort.h"
 
-static void assertarr(const void *actual, const void *expected, int n) {
+static void assertarr(const int *actual, const int *expected, int n) {
   for (int i = 0; i < n; i++) {
     assert(*(actual + i) == *(expected + i));
   }
 }
 
 void test_quick_sort(void) {
-  // Should work as expected on int[]
-  int arr[] = {5, 4, 5, 3, 1, 2} assertarr(quick_sort(arr, 6),
-                                           {1, 2, 3, 4, 5, 5}, 6);
+  int arr[] = {5, 4, 5, 3, 1, 2};
+  quick_sort(arr, 6);
 
-  // Should work as expected on char[]
-  char list[] = "hello";
-  assertarr(quick_sort(list, 5), "ehllo", 5)
+  assertarr(arr, (int[]){1, 2, 3, 4, 5, 5}, 6);
 }
