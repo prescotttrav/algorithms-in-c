@@ -1,11 +1,16 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "../utils/array.h"
 #include "quick-sort-iterative.h"
+
+typedef struct position {
+  int low, high;
+} position_t;
 
 /* quick implementation of a queue */
 typedef struct q_node {
-  int *val;
+  position_t *val;
   struct q_node *next;
 } q_node;
 
@@ -36,11 +41,11 @@ _Bool is_empty(q_t *q) {
   return q->size == 0;
 }
 
-int *remove_head(q_t *q) {
+position_t *remove_head(q_t *q) {
   q_node *head = NULL;
-  int *val = NULL;
+  position_t *val = NULL;
 
-  val = (int *) malloc(sizeof(int) * 2);
+  val = (position_t *) malloc(sizeof(position_t));
 
   if (!val) {
     free(val);
@@ -58,15 +63,14 @@ int *remove_head(q_t *q) {
   q->head = q->head->next;
   q->size -= 1;
 
-  for (int i = 0; i < 2; i++)
-    *(val + i) = *(head->val + i);
+  val = head->val;
 
   free(head);
 
   return val;
 }
 
-void add_tail(q_t *q, int *val) {
+void add_tail(q_t *q, position_t *val) {
   q_node *tail = NULL;
 
   tail = (q_node *) malloc(sizeof(q_node));
@@ -92,90 +96,74 @@ void add_tail(q_t *q, int *val) {
 
 /* end of queue implementation */
 
-static void swap(int *arr, int i, int j) {
-  int temp = *(arr + i);
-  *(arr + i) = *(arr + j);
-  *(arr + j) = temp;
-}
+position_t *build_position(int low, int n) {
+  position_t *pos = NULL;
 
-/* quick_sort sorts a list of items, iteratively */
-void quick_sort_iter(int *arr, int n) {
-  int low, high, last, el;
-  int *init = NULL;
-  q_t *q = init_q();
+  pos = (position_t *) malloc(sizeof(position_t));
 
-  if (n <= 1)
-    return;
-
-  low = 0;
-  el = n;
-
-  init = (int *) malloc(sizeof(int) * 2);
-
-  if (!init) {
-    free(init);
+  if (!pos) {
+    free(pos);
     fprintf(stderr, "Allocation memory failed.\n");
     exit(-1);
   }
 
-  *init = low;
-  *(init + 1) = el;
+  pos->low = low;
+  pos->high = n - 1 + low;
 
-  add_tail(q, init);
+  return pos;
+}
+
+q_t *initialize_q(int start, int n) {
+  q_t *q = init_q();
+  position_t *first = build_position(start, n);
+
+  add_tail(q, first);
+
+  return q;
+}
+
+/* quick_sort sorts a list of items, iteratively */
+void quick_sort_iter(int *arr, int n) {
+  int low, high, pivot, nel;
+  q_t *q;
+
+  if (n <= 1)
+    return;
+
+  q = initialize_q(0, n);
 
   while (!is_empty(q)) {
-    int *left, *right;
-    int *val = remove_head(q);
+    position_t *pos, *left, *right;
 
-    if (!val)
+    pos = remove_head(q);
+
+    if (!pos)
       continue;
 
-    low = *val;
-    el = *(val + 1);
-    high = el - 1 + low;
-    last = low;
+    low = pos->low;
+    high = pos->high;
+    pivot = low;
+    nel = high - low + 1;
 
     if (low >= high)
       continue;
 
-    swap(arr, low, (rand() % el) + low);
+    swap_int(arr, low, (rand() % nel) + low);
 
-    for (int i = 0; i < el; i++) {
+    for (int i = 0; i < nel; i++) {
       if (arr[low + i] < arr[low]) {
-        swap(arr, low + i, ++last);
+        swap_int(arr, low + i, ++pivot);
       }
     }
-    swap(arr, low, last);
+    swap_int(arr, low, pivot);
 
-    left = NULL;
-    left = (int *) malloc(sizeof(int) * 2);
-
-    if (!left) {
-      free(left);
-      fprintf(stderr, "Allocation memory failed.\n");
-      exit(-1);
-    }
-
-    *left = low;
-    *(left + 1) = last - low;
-
+    left = build_position(low, pivot - low);
     add_tail(q, left);
 
-    right = NULL;
-    right = (int *) malloc(sizeof(int) * 2);
-
-    if (!right) {
-      free(right);
-      fprintf(stderr, "Allocation memory failed.\n");
-      exit(-1);
-    }
-
-    *right = last - low + 1 + low;
-    *(right + 1) = high - last;
-
+    right = build_position(pivot + 1, high - pivot);
     add_tail(q, right);
 
-    free(val);
+    free(pos);
   }
 
   free(q);
