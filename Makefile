@@ -1,4 +1,4 @@
-CC=gcc
+CC=gcc -g
 
 MODULE_SRC=$(wildcard **/**/*.c)
 MODULE_OBJ=$(patsubst %.c,%.o,$(MODULE_SRC))
