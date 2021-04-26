@@ -1,12 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "../data-structures/linked-list.h"
+#include "../data-structures/queue.h"
 
 #include "../utils/array.h"
 #include "quick-sort-iterative.h"
-
-/* Quick sort iterative implematation sorting int array low to high */
 
 static Position build_position(int low, int n) {
   Position pos = NULL;
