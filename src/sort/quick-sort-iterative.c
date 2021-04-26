@@ -54,8 +54,10 @@ void quick_sort_iter(int *arr, int n) {
     pivot = low;
     nel = high - low + 1;
 
-    if (low >= high)
+    if (low >= high) {
+      free(pos);
       continue;
+    }
 
     swap_int(arr, low, (rand() % nel) + low);
 
