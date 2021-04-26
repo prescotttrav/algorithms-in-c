@@ -8,7 +8,7 @@ typedef struct position {
   int low, high;
 } position_t;
 
-/* quick implementation of a queue */
+/* Queue used for storing linked list of position_t values */
 typedef struct q_node {
   position_t *val;
   struct q_node *next;
@@ -19,7 +19,7 @@ typedef struct q_t {
   q_node *head, *tail;
 } q_t;
 
-q_t *init_q(void) {
+static q_t *init_q(void) {
   q_t *q = NULL;
 
   q = (q_t *) malloc(sizeof(q_t));
@@ -37,11 +37,11 @@ q_t *init_q(void) {
   return q;
 }
 
-_Bool is_empty(q_t *q) {
+static _Bool is_empty(q_t *q) {
   return q->size == 0;
 }
 
-position_t *remove_head(q_t *q) {
+static position_t *remove_head(q_t *q) {
   q_node *head = NULL;
   position_t *val = NULL;
 
@@ -70,7 +70,7 @@ position_t *remove_head(q_t *q) {
   return val;
 }
 
-void add_tail(q_t *q, position_t *val) {
+static void add_tail(q_t *q, position_t *val) {
   q_node *tail = NULL;
 
   tail = (q_node *) malloc(sizeof(q_node));
@@ -94,9 +94,9 @@ void add_tail(q_t *q, position_t *val) {
   q->size += 1;
 }
 
-/* end of queue implementation */
+/* Quick sort iterative implematation sorting int array low to high */
 
-position_t *build_position(int low, int n) {
+static position_t *build_position(int low, int n) {
   position_t *pos = NULL;
 
   pos = (position_t *) malloc(sizeof(position_t));
@@ -113,7 +113,7 @@ position_t *build_position(int low, int n) {
   return pos;
 }
 
-q_t *initialize_q(int start, int n) {
+static q_t *initialize_q(int start, int n) {
   q_t *q = init_q();
   position_t *first = build_position(start, n);
 
@@ -122,7 +122,6 @@ q_t *initialize_q(int start, int n) {
   return q;
 }
 
-/* quick_sort sorts a list of items, iteratively */
 void quick_sort_iter(int *arr, int n) {
   int low, high, pivot, nel;
   q_t *q;
