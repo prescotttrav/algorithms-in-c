@@ -3,7 +3,7 @@
 
 #include "../data-structures/queue.h"
 
-#include "../utils/array.h"
+#include "../utils/generic.h"
 #include "quick-sort-iterative.h"
 
 static Position build_position(int low, int n) {
@@ -59,14 +59,15 @@ void quick_sort_iter(int *arr, int n) {
       continue;
     }
 
-    swap_int(arr, low, (rand() % nel) + low);
+    swap(arr + low, arr + (rand() % nel) + low, sizeof(int));
 
     for (int i = 0; i < nel; i++) {
       if (arr[low + i] < arr[low]) {
-        swap_int(arr, low + i, ++pivot);
+        ++pivot;
+        swap(arr + low + i, arr + pivot, sizeof(int));
       }
     }
-    swap_int(arr, low, pivot);
+    swap(arr + low, arr + pivot, sizeof(int));
 
     left = build_position(low, pivot - low);
     q->add(q, left);
