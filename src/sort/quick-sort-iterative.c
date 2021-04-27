@@ -6,7 +6,11 @@
 #include "../utils/generic.h"
 #include "quick-sort-iterative.h"
 
-static Position build_position(int low, int n) {
+static void swap_elem(int *arr, int i, int j) {
+  swap(arr + i, arr + j, sizeof(int));
+}
+
+static Position build_pos(int low, int n) {
   Position pos = NULL;
 
   pos = (Position) malloc(sizeof(struct position));
@@ -23,13 +27,13 @@ static Position build_position(int low, int n) {
   return pos;
 }
 
-static Queue initialize_q(int start, int n) {
-  Queue q = init_q();
-  Position first = build_position(start, n);
+static void add_pos(Queue q, int start, int size) {
+  Position pos = build_pos(start, size);
 
-  q->add(q, first);
-
-  return q;
+  if (pos && pos->low < pos->high)
+    q->add(q, pos);
+  else
+    free(pos);
 }
 
 void quick_sort_iter(int *arr, int n) {
@@ -39,41 +43,33 @@ void quick_sort_iter(int *arr, int n) {
   if (n <= 1)
     return;
 
-  q = initialize_q(0, n);
+  q = init_q();
+  add_pos(q, 0, n);
 
   while (!q->is_empty(q)) {
-    Position pos, left, right;
+    Position pos;
 
     pos = q->remove(q);
-
-    if (!pos)
-      continue;
 
     low = pos->low;
     high = pos->high;
     pivot = low;
     nel = high - low + 1;
 
-    if (low >= high) {
-      free(pos);
-      continue;
-    }
-
-    swap(arr + low, arr + (rand() % nel) + low, sizeof(int));
+    swap_elem(arr, low, rand() % nel + low);
 
     for (int i = 0; i < nel; i++) {
       if (arr[low + i] < arr[low]) {
-        ++pivot;
-        swap(arr + low + i, arr + pivot, sizeof(int));
+        swap_elem(arr, low + i, ++pivot);
       }
     }
-    swap(arr + low, arr + pivot, sizeof(int));
+    swap_elem(arr, low, pivot);
 
-    left = build_position(low, pivot - low);
-    q->add(q, left);
+    // Half less than pivot
+    add_pos(q, low, pivot - low);
 
-    right = build_position(pivot + 1, high - pivot);
-    q->add(q, right);
+    // Half greater than pivot
+    add_pos(q, pivot + 1, high - pivot);
 
     free(pos);
   }
